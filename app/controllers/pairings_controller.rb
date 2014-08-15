@@ -29,7 +29,6 @@ class PairingsController < ApplicationController
 
 	# This updates the "constellation" (the grid) of bean / pastry associations
 	def update
-		raise "asdf"
 		Pairing.destroy_all
 		params.each do |key,val|
 			if key[0..6] == "checky_"
