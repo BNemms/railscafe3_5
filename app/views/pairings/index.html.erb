@@ -1,0 +1,30 @@
+<h1>Dude here's a bunch of great-tasting combos:</h1>
+
+<%= form_for @pairing do |f| %>
+
+<table>
+<tr>
+	<td></td>
+	<% Pastry.all.each do |p| %>
+		<td><%= p.name %></td>
+	<% end %>
+</tr>
+<% Bean.all.each do |b| %>
+	<tr>
+	<td><%= b.name %></td>
+	<% Pastry.all.each do |p| %>
+		<td>
+			<%#= b.pairings.where(pastry_id: p.id).first ? "X" : "O" %>
+			<%= check_box_tag "checky_#{b.id}_#{p.id}", "true",
+				b.pairings.where(pastry_id: p.id).first %>
+		</td>
+	<% end %>
+	</tr>
+<% end %>
+</table>
+
+	<%#= f.collection_select :bean_id, Bean.all, :id, :name %>
+	<%#= f.collection_select :pastry_id, Pastry.all, :id, :name %>
+	<%= f.submit "Update all the pairings in the constellation above" %>
+<% end %>
+

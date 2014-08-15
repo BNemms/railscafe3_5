@@ -1,0 +1,74 @@
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/ui-darkness/jquery-ui.css" rel="stylesheet">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+<style>
+	.ui-autocomplete .highlight {
+		text-decoration: underline;
+	}
+</style>
+
+<h1>Dude here's a bunch of great-tasting combos:</h1>
+
+<table>
+<tr>
+	<td></td>
+	<% Pastry.all.each do |p| %>
+		<td><%= p.name %></td>
+	<% end %>
+</tr>
+<% Bean.all.each do |b| %>
+	<tr>
+	<td><%= b.name %></td>
+	<% Pastry.all.each do |p| %>
+		<td>
+			<%= check_box "whatever", b.pairings.where(pastry_id: p.id).first %>
+		</td>
+	<% end %>
+	</tr>
+<% end %>
+</table>
+
+<%= form_for @pairing do |f| %>
+	<%= f.text_field :bean_txt %>
+	<%= f.submit %>
+<% end %>
+
+<script>
+	var beans = <%= raw @beans.to_json %>;
+	var pastries = <%= raw @pastries.to_json %>;
+	console.log(beans,pastries);
+
+	/*
+	 * jQuery UI Autocomplete: Highlight Matched Text
+	 * http://salman-w.blogspot.com/2013/12/jquery-ui-autocomplete-examples.html
+	 */
+	var pastryData = [];
+	for(var i = 0; i < pastries.length; ++i)
+		pastryData.push({value: pastries[i]._id.$oid, label: pastries[i].name});
+	console.log(pastryData);
+
+	$(function() {
+		function highlightText(text, $node) {
+			var searchText = $.trim(text).toLowerCase(), currentNode = $node.get(0).firstChild, matchIndex, newTextNode, newSpanNode;
+			while ((matchIndex = currentNode.data.toLowerCase().indexOf(searchText)) >= 0) {
+				newTextNode = currentNode.splitText(matchIndex);
+				currentNode = newTextNode.splitText(searchText.length);
+				newSpanNode = document.createElement("span");
+				newSpanNode.className = "highlight";
+				currentNode.parentNode.insertBefore(newSpanNode, currentNode);
+				newSpanNode.appendChild(newTextNode);
+			}
+		}
+		$("#autocomplete").autocomplete({
+			source: pastryData
+		}).data("ui-autocomplete")._renderItem = function(ul, item) {
+			var $a = $("<a></a>").text(item.label);
+			highlightText(this.term, $a);
+			return $("<li></li>").append($a).appendTo(ul);
+		};
+	});
+</script>
+
+
+
+

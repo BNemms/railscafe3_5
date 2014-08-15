@@ -1,0 +1,20 @@
+<!-- RAILSCAFE3 -->
+
+<h1>Our Beans v 3.0</h1>
+<p>
+  <%= link_to "Show All",          beans_path(beanfilter:"showall") %>
+  <br>
+  <%= link_to "Dark Roasts Only",  beans_path(beanfilter:"dark") %>
+  <br>
+  <%= link_to "Light Roasts Only", beans_path(beanfilter:"light") %>
+  <br>
+  <%= link_to "In Stock", beans_path(beanfilter:"instock") %>
+</p>
+<ul>
+  <% @beans.each do |b| %>
+  <li>
+    <strong> <%= b.name %> </strong> --[ <%= b.roast %> ] 
+    <%= link_to "Click for bean info", edit_bean_path(b) %>
+  </li>
+  <% end %>
+</ul>
