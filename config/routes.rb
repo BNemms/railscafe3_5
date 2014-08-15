@@ -15,6 +15,8 @@ Rails.application.routes.draw do
 
   get 'pairings' => 'pairings#index', as: :pairings
   post 'pairings' => 'pairings#create'
+  patch 'pairings' => 'pairings#update'
+  put 'pairings' => 'pairings#update'
 
 #  resources :pairings, only: [:index, :create]
 end
